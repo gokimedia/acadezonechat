@@ -1,0 +1,164 @@
+// schema.prisma
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Admin modeli
+model Admin {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  email     String   @unique
+  password  String
+  role      String   @default("admin")
+  lastLogin DateTime?
+  createdAt DateTime @default(now())
+}
+
+// Kullanıcı modeli
+model User {
+  id        String    @id @default(cuid())
+  name      String
+  surname   String
+  email     String
+  phone     String
+  createdAt DateTime  @default(now())
+  sessions  UserSession[]
+  chats     ChatAnalytic[]
+  infoRequests  InformationRequest[]
+  appRequests   ApplicationRequest[]
+}
+
+// Bölüm modeli
+model Department {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  createdAt DateTime @default(now())
+  courses   Course[]
+  sessions  UserSession[]
+  chats     ChatAnalytic[]
+}
+
+// Kurs modeli
+model Course {
+  id          String    @id @default(cuid())
+  title       String
+  description String?
+  department  Department @relation(fields: [departmentId], references: [id])
+  departmentId String
+  url         String?
+  imageUrl    String?
+  createdAt   DateTime  @default(now())
+  campaigns   Campaign[]
+  recommendations Recommendation[]
+}
+
+// Kampanya modeli
+model Campaign {
+  id           String    @id @default(cuid())
+  title        String
+  description  String?
+  discountRate Int?
+  expiryDate   DateTime?
+  course       Course    @relation(fields: [courseId], references: [id])
+  courseId     String
+  createdAt    DateTime  @default(now())
+}
+
+// Soru modeli
+model Question {
+  id        String   @id @default(cuid())
+  text      String
+  orderNum  Int
+  createdAt DateTime @default(now())
+  options   Option[]
+  nextOptions Option[] @relation("QuestionNextOptions")
+}
+
+// Seçenek modeli
+model Option {
+  id            String   @id @default(cuid())
+  question      Question @relation(fields: [questionId], references: [id])
+  questionId    String
+  text          String
+  nextQuestion  Question? @relation("QuestionNextOptions", fields: [nextQuestionId], references: [id])
+  nextQuestionId String?
+  createdAt     DateTime @default(now())
+  recommendations Recommendation[]
+}
+
+// Öneri modeli
+model Recommendation {
+  id        String   @id @default(cuid())
+  option    Option   @relation(fields: [optionId], references: [id])
+  optionId  String
+  course    Course   @relation(fields: [courseId], references: [id])
+  courseId  String
+  createdAt DateTime @default(now())
+}
+
+// Kullanıcı oturumu modeli
+model UserSession {
+  id          String    @id @default(cuid())
+  user        User      @relation(fields: [userId], references: [id])
+  userId      String
+  department  Department? @relation(fields: [departmentId], references: [id])
+  departmentId String?
+  sessionData Json?
+  createdAt   DateTime  @default(now())
+}
+
+// Chatbot ayarları modeli
+model ChatbotSetting {
+  id             String   @id @default(cuid())
+  name           String   @default("AcadeZone Eğitim Asistanı")
+  primaryColor   String   @default("#3498db")
+  secondaryColor String   @default("#2980b9")
+  welcomeMessage String   @default("Merhaba! AcadeZone Eğitim Asistanı'na hoş geldiniz. Size en uygun eğitim programlarını bulmak için yardımcı olabilirim.")
+  logoUrl        String?
+  active         Boolean  @default(true)
+  updatedAt      DateTime @default(now()) @updatedAt
+}
+
+// Chat analitik modeli
+model ChatAnalytic {
+  id               String    @id @default(cuid())
+  sessionId        String    @unique
+  user             User?     @relation(fields: [userId], references: [id])
+  userId           String?
+  startTime        DateTime  @default(now())
+  endTime          DateTime?
+  messageCount     Int       @default(0)
+  completed        Boolean   @default(false)
+  resultedInContact Boolean   @default(false)
+  department       Department? @relation(fields: [departmentId], references: [id])
+  departmentId     String?
+  pageUrl          String?
+  referrer         String?
+  createdAt        DateTime  @default(now())
+}
+
+// Bilgi talebi modeli
+model InformationRequest {
+  id          String   @id @default(cuid())
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String
+  requestType String?
+  status      String   @default("new")
+  createdAt   DateTime @default(now())
+}
+
+// Başvuru talebi modeli
+model ApplicationRequest {
+  id          String   @id @default(cuid())
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String
+  requestType String?
+  status      String   @default("new")
+  createdAt   DateTime @default(now())
+}

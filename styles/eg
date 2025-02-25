@@ -1,0 +1,94 @@
+// Admin Paneli Mimarisi
+
+/**
+ * Proje Yapısı:
+ * 
+ * /pages
+ *   /admin
+ *     /index.js          - Admin giriş sayfası
+ *     /dashboard.js      - Ana yönetim paneli
+ *     /chatbot.js        - Chatbot ayarları
+ *     /messages.js       - Mesaj ve soru yönetimi
+ *     /departments.js    - Bölüm yönetimi
+ *     /courses.js        - Eğitim programları yönetimi
+ *     /campaigns.js      - Kampanya yönetimi
+ *     /users.js          - Kullanıcı yönetimi
+ *     /statistics.js     - İstatistikler ve raporlar
+ *     /embed.js          - Embed kodu yönetimi
+ *   /api
+ *     /admin
+ *       /login.js        - Admin girişi
+ *       /chatbot.js      - Chatbot ayarları CRUD
+ *       /messages.js     - Mesaj CRUD
+ *       /departments.js  - Bölüm CRUD
+ *       /courses.js      - Eğitim programları CRUD
+ *       /campaigns.js    - Kampanya CRUD
+ *       /statistics.js   - İstatistik verileri
+ * 
+ * /components
+ *   /admin
+ *     /Layout.js         - Admin panel düzeni
+ *     /Sidebar.js        - Admin yan menüsü
+ *     /Header.js         - Admin üst menüsü
+ *     /LoginForm.js      - Admin giriş formu
+ *     /ChatbotBuilder.js - Soru akışı oluşturucu
+ *     /MessageEditor.js  - Mesaj düzenleyici
+ *     /CourseForm.js     - Eğitim programı formu
+ *     /CampaignForm.js   - Kampanya formu
+ *     /StatisticsChart.js - İstatistik grafikleri
+ *     /EmbedCodeGenerator.js - Embed kodu oluşturucu
+ *     /Table.js          - Veri tablosu bileşeni
+ *     /Modal.js          - Modal pencere bileşeni
+ * 
+ * /lib
+ *   /admin
+ *     /auth.js           - Admin kimlik doğrulama
+ *     /permissions.js    - Yetkilendirme
+ */
+
+// Veritabanı Şeması Güncellemeleri
+
+/**
+ * Tablolar:
+ * 
+ * admins
+ * - id (PK)
+ * - username
+ * - password (hashed)
+ * - email
+ * - role (admin, editor)
+ * - last_login
+ * - created_at
+ * 
+ * chatbot_settings
+ * - id (PK)
+ * - name
+ * - primary_color
+ * - secondary_color
+ * - welcome_message
+ * - logo_url
+ * - active (boolean)
+ * - created_at
+ * - updated_at
+ * 
+ * message_flows
+ * - id (PK)
+ * - name
+ * - description
+ * - is_default (boolean)
+ * - created_at
+ * - updated_at
+ * 
+ * chat_analytics
+ * - id (PK)
+ * - session_id
+ * - user_id (FK, nullable)
+ * - start_time
+ * - end_time
+ * - message_count
+ * - completed (boolean)
+ * - resulted_in_contact (boolean)
+ * - department_id (FK, nullable)
+ * - page_url
+ * - referrer
+ */
