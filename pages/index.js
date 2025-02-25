@@ -36,10 +36,8 @@ export default function Home() {
           </h1>
           
           {showAdminLink && (
-            <Link href="/admin">
-              <a className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700">
-                Admin Paneli
-              </a>
+            <Link href="/admin" className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700">
+              Admin Paneli
             </Link>
           )}
         </div>
